@@ -1,0 +1,11 @@
+1- Correr el script de la base de datos
+
+2- Abrir el proyecto en neatbeans
+
+3- Importar a la bibloteca del proyecto, las librerias que se encuentran en la carpeta --> EventSystem/dist/lib: (jcalendar-1.4, sqljdbc4-2.0, DatePicker)
+
+3- Ir al paquete "herramientas", y en la clase Utilidades, asignar el usuario y contraseña para la base de datos.
+
+5- Correr la aplicación.
+
+

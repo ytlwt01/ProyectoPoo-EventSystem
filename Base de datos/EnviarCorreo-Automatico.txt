@@ -1,0 +1,85 @@
+
+use EventSystem
+declare @CodEvento int, @Descripcion varchar(100) ,@Mensaje Varchar(MAX), @Fecha date, @CodUsuario int, @CodMiembro int, @Nombre varchar(50), @Apellido varchar(50), @Correo varchar(50)
+
+
+declare Cursor_Miembros cursor for select E.CodEvento, E.Descripcion, E.Mensaje, E.Fecha, E.CodUsuario, M.CodMiembro, M.Nombre, M.Apellido, M.Correo FROM Eventos E inner join EventosVsMiembros EvsM on E.CodEvento = EvsM.CodEvento inner join Miembros M on M.CodMiembro = EvsM.CodMiembro
+
+
+open Cursor_Miembros
+
+FETCH Cursor_Miembros into @CodEvento, @Descripcion ,@Mensaje, @Fecha, @CodUsuario, @CodMiembro, @Nombre, @Apellido, @Correo 
+
+WHILE (@@FETCH_STATUS = 0 )
+BEGIN
+
+
+	
+	if (CONVERT(DATE,(getdate())) >= @Fecha)
+	BEGIN
+	use EventSystem
+	
+    declare @MensajeCompleto varchar(MAX) = '<!DOCTYPE html><html><body><p>'+'Hola '+@Nombre+' '+@Apellido+'<br><br>'+@Mensaje+'<br>'+'</p> </body></html>'
+    
+	delete from EventosVsMiembros where CodMiembro=@CodMiembro and CodEvento = @CodEvento
+    
+    USE [msdb]
+    EXEC sp_send_dbmail
+
+      @profile_name = 'PerfilBD',
+
+      @recipients =@Correo,
+
+      @subject = @Descripcion,
+      
+     
+      @body = @MensajeCompleto,
+      
+       @body_format = 'HTML';
+	
+	END
+	
+
+	
+
+FETCH Cursor_Miembros into @CodEvento, @Descripcion ,@Mensaje, @Fecha, @CodUsuario, @CodMiembro, @Nombre, @Apellido, @Correo 
+
+END
+
+close Cursor_Miembros
+DEALLOCATE Cursor_Miembros
+
+
+---Una vez que termino, ahora a borrar los eventos
+
+
+use EventSystem
+declare @CodEvento2 int, @Fecha2 Date
+declare Cursor_Evento cursor for select CodEvento, Fecha FROM Eventos 
+open Cursor_Evento
+
+FETCH Cursor_Evento into @CodEvento2, @Fecha2
+
+WHILE (@@FETCH_STATUS = 0 )
+BEGIN
+
+
+	
+	if (CONVERT(DATE,(getdate())) >= @Fecha2)
+	BEGIN
+	use EventSystem
+	delete from Eventos where CodEvento=@CodEvento2 
+
+	END
+
+	
+
+FETCH Cursor_Evento into @CodEvento2,@Fecha2
+
+END
+
+close Cursor_Evento
+DEALLOCATE Cursor_Evento
+
+
+

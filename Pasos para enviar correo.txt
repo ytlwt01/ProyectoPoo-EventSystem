@@ -1,0 +1,29 @@
+
+1- Entrar al sql server managerment
+
+2- ir a la carpeta de administracion
+
+3- hacer clic derecho sobre correo electronico de base de datos. 
+
+4- selecciona la opcion "Configurar correo electronico de base de datos".
+
+5- Crear un perfil con nombre "PerfilBD".
+
+6- Luego te pedira asignarle una cuenta de gmail para enviar el correo.
+
+7- Deberas indicar lo siguientes datos: 
+	*Nombre de servidor: smtp.gmail.com
+	*Puerto: 587.
+	*Marcar el cuadro ssl.
+	*Seleccionar Autenticación basica e Indicar una cuenta y contraseña de gmail.
+
+
+8- clic en siguiente para crear la cuenta.
+
+9- Listo.
+
+
+
+Nota: Para enviar los correos de forma automatica, debera de crear una tarea en sqlserver, y pegar el cotenido del block de nota "EnviarCorreo",
+de lo contrario solo podra notificar los eventos de forma manual atraves del menu principal -> eventos "Consultar / eliminar"
+
